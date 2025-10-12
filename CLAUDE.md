@@ -1,3 +1,7 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 # Project Context: mo2-mode
 
 ## Project Purpose
@@ -78,6 +82,63 @@ Potential improvements:
 - Helper methods for common xEdit operations (clean, patch, etc.)
 - Support for other shells (PowerShell syntax)
 - Validation of paths before building
+
+## Development Commands
+
+### Building and Testing
+```bash
+# Build the library
+cargo build
+
+# Build with release optimizations
+cargo build --release
+
+# Run all tests
+cargo test
+
+# Run a specific test
+cargo test test_command_with_quoted_plugin_name
+
+# Run tests with output
+cargo test -- --nocapture
+
+# Run doc tests only
+cargo test --doc
+
+# Check code without building
+cargo check
+
+# Format code
+cargo fmt
+
+# Run clippy linter
+cargo clippy
+```
+
+### Documentation
+```bash
+# Build and open documentation locally
+cargo doc --open
+
+# Build documentation including private items
+cargo doc --document-private-items
+```
+
+## Architecture
+
+### Single-Module Design
+All code resides in `src/lib.rs` - this is intentional for a simple library. The module contains:
+- Public `MO2Command` struct (lines 25-118)
+- Private helper functions `quote_path()` and `escape_for_mo2_args()` (lines 120-134)
+- Comprehensive test module (lines 136-279)
+
+### Builder Pattern Flow
+1. `new()` initializes with two paths and an empty argument vector
+2. `.arg()` or `.args()` accumulates arguments (builder pattern returns `Self`)
+3. `.build()` produces a command string OR `.execute()` produces `std::process::Command`
+
+### Escaping Logic Critical Points
+The `escape_for_mo2_args()` function (line 129) handles nested quoting by replacing `"` with `\"`. This is the core of solving the nested quoting problem. The `.execute()` method bypasses string escaping by directly constructing `Command` arguments, which is safer and recommended.
 
 ## Development Notes
 

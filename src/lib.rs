@@ -141,8 +141,9 @@ mod tests {
     fn test_basic_command_without_args() {
         let cmd = MO2Command::new(
             r"C:\Modding\MO2\ModOrganizer.exe",
-            r"d:\programs\xedit\xedit64.exe"
-        ).build();
+            r"d:\programs\xedit\xedit64.exe",
+        )
+        .build();
 
         assert_eq!(
             cmd,
@@ -154,7 +155,7 @@ mod tests {
     fn test_command_with_simple_args() {
         let cmd = MO2Command::new(
             r"C:\Modding\MO2\ModOrganizer.exe",
-            r"d:\programs\xedit\xedit64.exe"
+            r"d:\programs\xedit\xedit64.exe",
         )
         .arg("-sse")
         .arg("-autoexit")
@@ -170,7 +171,7 @@ mod tests {
     fn test_command_with_quoted_plugin_name() {
         let cmd = MO2Command::new(
             r"C:\Modding\MO2\ModOrganizer.exe",
-            r"d:\programs\xedit\xedit64.exe"
+            r"d:\programs\xedit\xedit64.exe",
         )
         .arg("-sse")
         .arg("-autoexit")
@@ -188,7 +189,7 @@ mod tests {
     fn test_command_with_multiple_args_at_once() {
         let cmd = MO2Command::new(
             r"C:\Modding\MO2\ModOrganizer.exe",
-            r"d:\programs\xedit\xedit64.exe"
+            r"d:\programs\xedit\xedit64.exe",
         )
         .args(["-sse", "-autoexit", "-autoload"])
         .build();
@@ -207,7 +208,7 @@ mod tests {
 
         let cmd = MO2Command::new(
             r"C:\Modding\MO2\ModOrganizer.exe",
-            r"d:\programs\xedit\SSEEdit64.exe"
+            r"d:\programs\xedit\SSEEdit64.exe",
         )
         .arg(args)
         .build();
@@ -220,13 +221,10 @@ mod tests {
 
     #[test]
     fn test_escaping_complex_quotes() {
-        let cmd = MO2Command::new(
-            r"C:\MO2\ModOrganizer.exe",
-            r"C:\tools\program.exe"
-        )
-        .arg(r#"-flag "value with spaces""#)
-        .arg(r#""another quoted value""#)
-        .build();
+        let cmd = MO2Command::new(r"C:\MO2\ModOrganizer.exe", r"C:\tools\program.exe")
+            .arg(r#"-flag "value with spaces""#)
+            .arg(r#""another quoted value""#)
+            .build();
 
         assert_eq!(
             cmd,
@@ -240,7 +238,7 @@ mod tests {
 
         let mo2_cmd = MO2Command::new(
             r"C:\Modding\MO2\ModOrganizer.exe",
-            r"d:\programs\xedit\xedit64.exe"
+            r"d:\programs\xedit\xedit64.exe",
         )
         .arg("-sse")
         .arg("-autoexit")
@@ -249,7 +247,10 @@ mod tests {
         let cmd = mo2_cmd.execute();
 
         // Verify the program is correct
-        assert_eq!(cmd.get_program(), OsStr::new(r"C:\Modding\MO2\ModOrganizer.exe"));
+        assert_eq!(
+            cmd.get_program(),
+            OsStr::new(r"C:\Modding\MO2\ModOrganizer.exe")
+        );
 
         // Verify the arguments
         let args: Vec<&OsStr> = cmd.get_args().collect();
@@ -266,7 +267,7 @@ mod tests {
 
         let mo2_cmd = MO2Command::new(
             r"C:\Modding\MO2\ModOrganizer.exe",
-            r"C:\tools\notepad++.exe"
+            r"C:\tools\notepad++.exe",
         );
 
         let cmd = mo2_cmd.execute();
